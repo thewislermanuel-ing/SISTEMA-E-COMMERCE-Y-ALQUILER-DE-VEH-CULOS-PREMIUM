@@ -41,6 +41,28 @@
       .replace(/'/g, '&#39;');
   };
 
+  // Normalize asset paths so the app works both with assets/ and root-level files
+  const normalizeAssetPath = (value) => {
+    if (typeof value !== 'string') return '';
+    return value.trim().replace(/^\.?\//, '').replace(/^assets\//i, '');
+  };
+
+  const resolveAssetPath = (value, fallback = '') => {
+    const normalized = normalizeAssetPath(value);
+    return normalized || fallback;
+  };
+
+  const normalizeCatalogPaths = (items) => {
+    if (!Array.isArray(items)) return [];
+    return items.map((item) => {
+      if (!item || typeof item !== 'object') return item;
+      const normalizedItem = { ...item };
+      if (normalizedItem.logo) normalizedItem.logo = normalizeAssetPath(normalizedItem.logo);
+      if (normalizedItem.imagen) normalizedItem.imagen = normalizeAssetPath(normalizedItem.imagen);
+      return normalizedItem;
+    });
+  };
+
   // Pre-load default values in state
   const DEFAULT_CLIENT_DATA = {
     name: 'Ing. Wisler M. Espinales',
@@ -337,8 +359,8 @@
   }
 
   function processCatalog(data) {
-    state.vehiculos = Array.isArray(data.vehiculos) ? data.vehiculos : [];
-    state.motos = Array.isArray(data.motos) ? data.motos : [];
+    state.vehiculos = normalizeCatalogPaths(Array.isArray(data.vehiculos) ? data.vehiculos : []);
+    state.motos = normalizeCatalogPaths(Array.isArray(data.motos) ? data.motos : []);
 
     // Combine into single catalog array
     state.catalog = [...state.vehiculos, ...state.motos];
@@ -464,6 +486,8 @@
     const isMoto = item.categoria === 'motos';
     const doorsText = isMoto ? 'Biplaza' : `${item.numeroPuertas || 4} Puertas`;
     const doorsIcon = isMoto ? 'fa-user-group' : 'fa-door-closed';
+    const logoSrc = resolveAssetPath(item.logo, '');
+    const imageSrc = resolveAssetPath(item.imagen, '');
 
     return `
       <div class="col-12 col-md-6 col-lg-4 col-xl-3 animate-fade-in">
@@ -475,13 +499,13 @@
 
           <!-- Card Header: Brand Logo & Identification Code -->
           <div class="card-top-info">
-            <img src="${escapeHtml(item.logo)}" alt="${escapeHtml(item.marca)}" class="card-brand-logo" loading="lazy" onerror="this.style.display='none'">
+            <img src="${escapeHtml(logoSrc)}" alt="${escapeHtml(item.marca)}" class="card-brand-logo" loading="lazy" onerror="this.style.display='none'">
             <span class="card-id-badge">#LME-${item.codigo}</span>
           </div>
 
           <!-- Vehicle Image with Smooth Zoom on Hover -->
           <div class="card-img-box">
-            <img src="${escapeHtml(item.imagen)}" alt="${escapeHtml(item.modelo)}" class="card-vehicle-img" loading="lazy">
+            <img src="${escapeHtml(imageSrc)}" alt="${escapeHtml(item.modelo)}" class="card-vehicle-img" loading="lazy">
           </div>
 
           <!-- Card Body -->
@@ -546,9 +570,9 @@
     state.selectedRentalVehicle = item;
 
     // Fill UI
-    dom.rentalCarLogo.src = item.logo || '';
+    dom.rentalCarLogo.src = resolveAssetPath(item.logo, '');
     dom.rentalCarCode.textContent = `#LME-${item.codigo}`;
-    dom.rentalCarImg.src = item.imagen || '';
+    dom.rentalCarImg.src = resolveAssetPath(item.imagen, '');
     dom.rentalCarName.textContent = item.modelo;
     dom.rentalCarType.textContent = item.tipo;
     dom.rentalRateDay.textContent = `${formatUSD(item.precio_alquiler_dia)} / Día`;
@@ -601,7 +625,7 @@
       codigo: item.codigo,
       marca: item.marca,
       modelo: item.modelo,
-      imagen: item.imagen,
+      imagen: resolveAssetPath(item.imagen, ''),
       tipo: item.tipo,
       modalidad: isDays ? 'Día(s)' : 'Hora(s)',
       duracion: duration,
@@ -623,7 +647,7 @@
     // Notify with SweetAlert2
     Swal.fire({
       title: '¡Contrato de Alquiler Agregado!',
-      html: `Se agregó <strong>${escapeHtml(item.modelo)}</strong> en modalidad de <strong>${duration} ${cartItem.modalidad}</strong> desde el <strong>${startDate}</strong> al carrito de compras.`,
+      html: `Se agregó <strong>${escapeHtml(item.modelo)}</strong> en modalidad de <strong>${duration} ${cartItem.modalidad}</strong> desde el <strong>${startDate}</strong> al carrito de compras.<br><strong>Fianza reembolsable:</strong> ${formatUSD(500)}`,
       icon: 'success',
       confirmButtonColor: '#ff9800',
       confirmButtonText: 'Ver Carrito 🛒',
@@ -667,7 +691,7 @@
         codigo: item.codigo,
         marca: item.marca,
         modelo: item.modelo,
-        imagen: item.imagen,
+        imagen: resolveAssetPath(item.imagen, ''),
         tipo: item.tipo,
         modalidad: 'Venta Definitiva',
         duracion: null,
@@ -754,7 +778,7 @@
       itemsHtml += `
         <div class="cart-item-row d-flex align-items-center justify-content-between flex-wrap gap-3">
           <div class="d-flex align-items-center gap-3">
-            <img src="${escapeHtml(item.imagen)}" alt="${escapeHtml(item.modelo)}" class="cart-item-thumb">
+            <img src="${escapeHtml(resolveAssetPath(item.imagen, ''))}" alt="${escapeHtml(item.modelo)}" class="cart-item-thumb">
             <div>
               <div class="d-flex align-items-center gap-2 mb-1">
                 <h6 class="text-white fw-bold mb-0">${escapeHtml(item.modelo)}</h6>
@@ -891,7 +915,7 @@
         codigo: ferrariOrLambo.codigo,
         marca: ferrariOrLambo.marca,
         modelo: ferrariOrLambo.modelo,
-        imagen: ferrariOrLambo.imagen,
+        imagen: resolveAssetPath(ferrariOrLambo.imagen, ''),
         tipo: ferrariOrLambo.tipo,
         modalidad: 'Venta Definitiva',
         duracion: null,
@@ -907,7 +931,7 @@
         codigo: luxurySedan.codigo,
         marca: luxurySedan.marca,
         modelo: luxurySedan.modelo,
-        imagen: luxurySedan.imagen,
+        imagen: resolveAssetPath(luxurySedan.imagen, ''),
         tipo: luxurySedan.tipo,
         modalidad: 'Día(s)',
         duracion: 3,
@@ -1030,9 +1054,9 @@
     });
 
     // Resolve Logo Base64 from window.PDF_THUMBNAILS
-    let logoDataUri = 'assets/logo_pagina.png';
+    let logoDataUri = 'logo_pagina.png';
     if (window.PDF_THUMBNAILS) {
-      logoDataUri = window.PDF_THUMBNAILS['assets/logo_pagina.png'] || window.PDF_THUMBNAILS['logo_pagina.png'] || logoDataUri;
+      logoDataUri = window.PDF_THUMBNAILS['logo_pagina.png'] || window.PDF_THUMBNAILS['assets/logo_pagina.png'] || logoDataUri;
     }
 
     // Build Items Table Rows
@@ -1045,9 +1069,9 @@
       totalDeposits += (item.fianza || 0);
 
       // Resolve Vehicle Thumbnail from Base64 Data URI
-      let thumbDataUri = item.imagen;
+      let thumbDataUri = resolveAssetPath(item.imagen, '');
       if (window.PDF_THUMBNAILS) {
-        thumbDataUri = window.PDF_THUMBNAILS[item.imagen] || window.PDF_THUMBNAILS[item.imagen.replace('assets/', '')] || thumbDataUri;
+        thumbDataUri = window.PDF_THUMBNAILS[resolveAssetPath(item.imagen, '')] || window.PDF_THUMBNAILS[item.imagen] || window.PDF_THUMBNAILS['assets/' + resolveAssetPath(item.imagen, '')] || thumbDataUri;
       }
 
       const isRental = item.type === 'rental';
@@ -1089,19 +1113,16 @@
     let clausesAndSignaturesHtml = '';
 
     if (hasRentals) {
-      // LITERAL REQUIRED BLOCK FROM SECTION 7.D.5
       clausesAndSignaturesHtml = `
-        <!-- Acuerdo de Responsabilidad y Términos de Alquiler (OBLIGATORIO EN ALQUILER - BLINDADO CON !IMPORTANT) -->
-        <div style="margin-top: 15px; padding: 10px 14px; background: #fafafa !important; border: 1px solid #e5e5e5; border-radius: 6px; font-size: 9.5px; color: #333333 !important; line-height: 1.45;">
+        <div style="margin-top: 15px; padding: 10px 14px; background: #fafafa !important; border: 1px solid #e5e5e5; border-radius: 6px; font-size: 9.5px; color: #333333 !important; line-height: 1.5;">
           <h5 style="margin: 0 0 6px 0; font-size: 10.5px; font-weight: bold; color: #111111 !important; text-transform: uppercase;">
             Acuerdo de Responsabilidad y Términos de Alquiler:
           </h5>
-          <p style="margin: 0 0 4px 0; color: #333333 !important;"><strong style="color: #111111 !important;">1. Custodia del Bien:</strong> El arrendatario se compromete a operar la unidad bajo las leyes de tránsito vigentes, no exceder los límites de velocidad y mantener el vehículo en óptimas condiciones mecánicas y estéticas.</p>
-          <p style="margin: 0 0 4px 0; color: #333333 !important;"><strong style="color: #111111 !important;">2. Cobertura & Deducible:</strong> La unidad cuenta con póliza de seguro completa con deducible del 10% en caso de colisión comprobada. Daños por negligencia, ingesta de alcohol o sustancias ilícitas son de responsabilidad exclusiva del arrendatario.</p>
-          <p style="margin: 0 0 4px 0; color: #333333 !important;"><strong style="color: #111111 !important;">3. Política de Combustible:</strong> La unidad se entrega con tanque lleno y debe ser devuelta en las mismas condiciones. De lo contrario, se aplicará el cargo estándar de reposición.</p>
+          <p style="margin: 0 0 4px 0; color: #333333 !important;"><strong style="color: #111111 !important;">1. Custodia del Bien:</strong> El arrendatario se compromete a operar la unidad con la debida prudencia y a mantenerla en perfecto estado durante la vigencia del contrato.</p>
+          <p style="margin: 0 0 4px 0; color: #333333 !important;"><strong style="color: #111111 !important;">2. Cobertura & Deducible:</strong> La unidad cuenta con póliza de seguro completa con deducible del 10% conforme a la política corporativa de alquiler.</p>
+          <p style="margin: 0 0 4px 0; color: #333333 !important;"><strong style="color: #111111 !important;">3. Política de Combustible:</strong> La unidad se entrega con tanque lleno y debe devolverse con el mismo nivel de combustible, en caso contrario se aplicará cargo adicional.</p>
         </div>
 
-        <!-- Firmas de Responsabilidad (BLINDADAS CONTRA TEXTO INVISIBLE) -->
         <table style="width: 100%; margin-top: 30px; font-size: 10px; text-align: center;" cellpadding="0" cellspacing="0">
           <tr>
             <td style="width: 45%; vertical-align: top;">
@@ -1121,11 +1142,9 @@
         </table>
       `;
     } else {
-      // Sale Only Warranty Block
       clausesAndSignaturesHtml = `
-        <!-- Bloque de Entrega Venta -->
         <div style="margin-top: 20px; padding: 10px; background: #fdfdfd; border-left: 3px solid #2e7d32; font-size: 9.5px; color: #444;">
-          <strong>Garantía de Satisfacción:</strong> Unidad vendida con garantía certificada de 3 años o 60,000 km, traspaso legal garantizado y asistencia vial 24/7 de cortesía durante el primer año.
+          <strong>Garantía de Satisfacción:</strong> Unidad vendida con garantía certificada de 3 años o 60,000 km, traspaso legal garantizado y asistencia vial 24/7 de cortesía durante la primera entrega.
         </div>
       `;
     }
@@ -1140,9 +1159,7 @@
 
     // COMPLETE DOCUMENT TEMPLATE (Pure White #ffffff Background, Zero Invisible Text)
     const pdfHtmlContent = `
-      <div class="pdf-doc-root" style="background-color: #ffffff !important; color: #333333 !important; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; padding: 20px 24px; box-sizing: border-box; width: 100%; max-width: 800px; margin: 0 auto; line-height: 1.35;">
-        
-        <!-- 1. Encabezado Centrado -->
+      <div class="pdf-doc-root" style="background-color: #ffffff !important; color: #333333 !important; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; padding: 20px 24px; box-sizing: border-box;">
         <div style="text-align: center; margin-bottom: 12px; border-bottom: 2px solid #111111; padding-bottom: 10px;">
           <img src="${logoDataUri}" alt="Luxury Motors Elite Corp." style="max-height: 52px; width: auto; margin-bottom: 4px; display: inline-block;">
           <h2 style="margin: 0; font-size: 18px; font-weight: bold; color: #111111 !important; letter-spacing: 1.5px; text-transform: uppercase;">
@@ -1156,7 +1173,6 @@
           </div>
         </div>
 
-        <!-- 2. Metadatos y Cliente (Tabla 2 Columnas) -->
         <table style="width: 100%; margin-bottom: 14px; background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 6px; padding: 8px 12px; font-size: 9px;" cellpadding="0" cellspacing="0">
           <tr>
             <td style="width: 52%; vertical-align: top; padding-right: 10px;">
@@ -1188,7 +1204,6 @@
           </tr>
         </table>
 
-        <!-- 3. Tabla de Vehículos / Productos -->
         <table style="width: 100%; border-collapse: collapse; margin-bottom: 14px;" cellpadding="0" cellspacing="0">
           <thead>
             <tr style="background: #111111; color: #ffffff !important; font-size: 9px; text-transform: uppercase;">
@@ -1207,12 +1222,11 @@
           </tbody>
         </table>
 
-        <!-- 4. Resumen de Totales y Nota de Certificación -->
         <table style="width: 100%; margin-top: 6px; margin-bottom: 10px;" cellpadding="0" cellspacing="0">
           <tr>
             <td style="width: 58%; vertical-align: top; padding-right: 15px;">
               <p style="margin: 0; color: #777777 !important; font-size: 8.5px; line-height: 1.4;">
-                * Este documento constituye una certificación legal y comercial de los servicios y compras pactadas con Luxury Motors Elite Corp. Todo vehículo cuenta con inspección técnica certificada de 150 puntos.
+                * Este documento constituye una certificación legal y comercial de los servicios y compras pactadas con Luxury Motors Elite Corp. Todo vehículo cuenta con inspección técnica, documentación oficial y entrega según las condiciones establecidas por el concesionario.
               </p>
             </td>
             <td style="width: 42%; vertical-align: top;">
@@ -1235,19 +1249,14 @@
           </tr>
         </table>
 
-        <!-- 5. Cláusulas Legales y Tabla de Doble Firma -->
         ${clausesAndSignaturesHtml}
 
-        <!-- 6. Pie de Página del Documento -->
         <div style="margin-top: 20px; border-top: 1px dashed #ccc; padding-top: 8px; text-align: center; font-size: 8.5px; color: #888888 !important;">
-          Documento generado automáticamente por el Sistema E-Commerce & Alquiler de Vehículos Premium | Arquitectura por Ing. Juancito Peña
+          Documento generado automáticamente por el Sistema E-Commerce & Alquiler de Vehículos Premium | Arquitectura por Ing. Wisler M. Espinales
         </div>
-
       </div>
     `;
 
-    // 4. Attach Container to Normal DOM Flow (NO left: -9999px, NO position: absolute)
-    // In normal flow, child elements maintain positive calculated height (1498 x 1478px)
     const printContainer = document.createElement('div');
     printContainer.id = 'luxury-pdf-export-container';
     printContainer.style.width = '794px';
@@ -1260,7 +1269,6 @@
     document.body.appendChild(printContainer);
 
     try {
-      // 5. Pre-load & decode all images (Base64 thumbnails & logo) to guarantee non-blank canvas
       const imgs = Array.from(printContainer.querySelectorAll('img'));
       await Promise.all(imgs.map((img) => {
         if (img.complete && img.naturalHeight !== 0) return Promise.resolve();
@@ -1270,10 +1278,8 @@
         });
       }));
 
-      // 6. Wait for CSS layout and box model to stabilize
       await new Promise((r) => setTimeout(r, 250));
 
-      // 7. Configure html2pdf Options for High Resolution & Anti-Blank Capture
       const opt = {
         margin: [6, 6, 6, 6],
         filename: filename,
@@ -1289,24 +1295,19 @@
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
       };
 
-      // 8. Execute html2pdf save directly from DOM container
       await html2pdf().set(opt).from(printContainer).save();
 
-      // 9. Clean up print container immediately
       if (printContainer.parentNode) {
         printContainer.parentNode.removeChild(printContainer);
       }
 
-      // Close loading dialog
       Swal.close();
 
-      // Reset cart and update storage
       state.cart = [];
       saveCartToStorage();
       updateCartBadge();
       renderCartModal();
 
-      // 10. Display Success Notification
       Swal.fire({
         title: '¡Documento Oficial Descargado!',
         html: `
