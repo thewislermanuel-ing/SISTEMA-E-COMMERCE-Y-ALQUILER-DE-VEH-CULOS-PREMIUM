@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="es" data-bs-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Luxury Motors Elite Corp. | Sistema E-Commerce y Alquiler Premium</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="assets/logo_pagina.png">
+
+  <!-- Google Fonts: Montserrat & Rajdhani for High-End Automotive Aesthetic -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=Rajdhani:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap 5.3.3 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <!-- FontAwesome 6.5.1 -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="luxury-body">
+
+  <!-- Top Announcement Bar -->
+  <div class="top-vip-bar text-center py-1">
+    <div class="container d-flex justify-content-between align-items-center flex-wrap">
+      <span class="vip-tag-text"><i class="fa-solid fa-crown text-warning me-1"></i> <strong>LUXURY MOTORS ELITE CORP.</strong> &bull; Concesionario Internacional y Alquiler Corporativo VIP</span>
+      <span class="vip-contact-text d-none d-md-inline"><i class="fa-solid fa-phone-volume text-info me-1"></i> Concierge VIP 24/7: +1 (809) 555-ELITE &bull; Av. Anacaona #105, Santo Domingo</span>
+    </div>
+  </div>
+
+  <!-- Sticky Glassmorphism Header & Navbar -->
+  <header class="sticky-top glass-navbar-container">
+    <nav class="navbar navbar-expand-lg navbar-dark px-3 px-lg-4">
+      <div class="container-fluid">
+        <!-- Brand Logo & Name -->
+        <a class="navbar-brand d-flex align-items-center" href="#inicio">
+          <div class="brand-icon-wrapper me-2">
+            <i class="fa-solid fa-car-side brand-car-icon"></i>
+          </div>
+          <div class="d-flex flex-column">
+            <span class="brand-title">LUXURY MOTORS</span>
+            <span class="brand-subtitle">ELITE CORP. &bull; V5.2 PRO</span>
+          </div>
+        </a>
+
+        <!-- Mobile Toggler -->
+        <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMainContent" aria-controls="navbarMainContent" aria-expanded="false" aria-label="Toggle navigation">
+          <i class="fa-solid fa-bars text-cyan fs-4"></i>
+        </button>
+
+        <!-- Navbar Content -->
+        <div class="collapse navbar-collapse" id="navbarMainContent">
+          <!-- Real-Time Search Bar -->
+          <div class="search-box-wrapper mx-lg-auto my-3 my-lg-0">
+            <div class="input-group search-input-group">
+              <span class="input-group-text bg-transparent border-0 text-cyan">
+                <i class="fa-solid fa-magnifying-glass"></i>
+              </span>
+              <input type="text" id="searchInput" class="form-control bg-transparent border-0 text-white" placeholder="Buscar por marca, modelo o tipo (ej. Ferrari, Mustang, Superbike)..." autocomplete="off">
+              <button class="btn btn-clear-search d-none" id="btnClearSearch" type="button" title="Limpiar búsqueda">
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Navigation & Category Tabs -->
+          <ul class="navbar-nav align-items-lg-center ms-auto gap-2">
+            <li class="nav-item">
+              <button class="nav-link cat-tab active" data-category="todos">
+                <i class="fa-solid fa-layer-group me-1"></i> Todos <span class="badge rounded-pill bg-dark-subtle border border-cyan text-cyan ms-1" id="badgeCountTodos">0</span>
+              </button>
+            </li>
+            <li class="nav-item">
+              <button class="nav-link cat-tab" data-category="vehiculos">
+                <i class="fa-solid fa-car-rear me-1"></i> Vehículos <span class="badge rounded-pill bg-dark-subtle border border-cyan text-cyan ms-1" id="badgeCountVehiculos">0</span>
+              </button>
+            </li>
+            <li class="nav-item">
+              <button class="nav-link cat-tab" data-category="motos">
+                <i class="fa-solid fa-motorcycle me-1"></i> Motos <span class="badge rounded-pill bg-dark-subtle border border-cyan text-cyan ms-1" id="badgeCountMotos">0</span>
+              </button>
+            </li>
+
+            <!-- Filter Dropdown -->
+            <li class="nav-item dropdown">
+              <button class="btn btn-outline-cyan dropdown-toggle btn-sm px-3" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fa-solid fa-sliders me-1"></i> Filtros
+              </button>
+              <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end shadow-lg p-3 custom-filter-dropdown">
+                <li class="dropdown-header text-cyan text-uppercase fw-bold p-0 mb-2">Filtrar por Marca</li>
+                <li>
+                  <select id="brandSelect" class="form-select form-select-sm bg-dark border-secondary text-white mb-3">
+                    <option value="todas">Todas las Marcas</option>
+                  </select>
+                </li>
+                <li class="dropdown-header text-cyan text-uppercase fw-bold p-0 mb-2">Ordenar Por</li>
+                <li>
+                  <select id="sortSelect" class="form-select form-select-sm bg-dark border-secondary text-white mb-2">
+                    <option value="default">Por Defecto (Catálogo)</option>
+                    <option value="price-asc">Precio Venta: Menor a Mayor</option>
+                    <option value="price-desc">Precio Venta: Mayor a Menor</option>
+                    <option value="rent-asc">Alquiler Día: Menor a Mayor</option>
+                    <option value="rent-desc">Alquiler Día: Mayor a Menor</option>
+                    <option value="brand-az">Marca: A - Z</option>
+                  </select>
+                </li>
+                <li>
+                  <button id="btnResetFilters" class="btn btn-sm btn-outline-secondary w-100 mt-2">
+                    <i class="fa-solid fa-arrow-rotate-left me-1"></i> Restablecer Filtros
+                  </button>
+                </li>
+              </ul>
+            </li>
+
+            <!-- Navbar Cart Button -->
+            <li class="nav-item ms-lg-2">
+              <button class="btn btn-cart-nav position-relative" id="btnOpenCartNav" data-bs-toggle="modal" data-bs-target="#cartModal">
+                <i class="fa-solid fa-cart-shopping me-1 text-gold"></i>
+                <span class="d-none d-xl-inline">Mi Carrito</span>
+                <span class="badge rounded-pill bg-danger border border-white position-absolute top-0 start-100 translate-middle cart-badge-num" id="navCartBadge">0</span>
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Hero Banner -->
+  <section id="inicio" class="hero-banner-section position-relative text-center">
+    <div class="hero-backdrop-glow"></div>
+    <div class="container position-relative py-5">
+      <!-- Centered Official Logo -->
+      <div class="hero-logo-wrapper mb-3 animate-fade-in">
+        <img src="assets/logo_pagina.png" alt="Luxury Motors Elite Corp. Logo Oficial" class="hero-official-logo">
+      </div>
+
+      <!-- Main Titles with High Contrast & Psychology of Color -->
+      <div class="hero-badge-pill mb-2">
+        <span class="badge bg-gold-gradient text-dark px-3 py-2 fw-bold text-uppercase">
+          <i class="fa-solid fa-star me-1"></i> Flota Exclusiva 2026 &bull; Concesionario & Alquiler VIP
+        </span>
+      </div>
+
+      <h1 class="hero-main-title mb-2">CATÁLOGO PREMIUM</h1>
+      <h2 class="hero-sub-title mb-3">LUXURY MOTORS ELITE CORP.</h2>
+      
+      <p class="hero-lead-text mx-auto mb-4">
+        Acceda a la colección más prestigiosa de superdeportivos, sedanes de gran lujo, SUVs blindadas y motocicletas de alto rendimiento del mundo. Venta directa y alquiler corporativo con cobertura total, sin intermediarios y con certificación internacional de 150 puntos.
+      </p>
+
+      <!-- Trust Badges & Highlights -->
+      <div class="row g-3 justify-content-center hero-highlights-row mb-4">
+        <div class="col-6 col-md-3">
+          <div class="hero-highlight-card">
+            <i class="fa-solid fa-shield-halved text-cyan fs-3 mb-2"></i>
+            <h6 class="text-white fw-bold mb-1">Garantía Certificada</h6>
+            <span class="highlight-desc">Inspección de 150 Puntos</span>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="hero-highlight-card">
+            <i class="fa-solid fa-file-invoice-dollar text-gold fs-3 mb-2"></i>
+            <h6 class="text-white fw-bold mb-1">Documentos Oficiales</h6>
+            <span class="highlight-desc">Facturas & Contratos en PDF</span>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="hero-highlight-card">
+            <i class="fa-solid fa-truck-fast text-orange fs-3 mb-2"></i>
+            <h6 class="text-white fw-bold mb-1">Entrega Inmediata</h6>
+            <span class="highlight-desc">Helipuerto / Aeropuerto VIP</span>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="hero-highlight-card">
+            <i class="fa-solid fa-headset text-cyan fs-3 mb-2"></i>
+            <h6 class="text-white fw-bold mb-1">Asistencia 24/7</h6>
+            <span class="highlight-desc">Concierge Ejecutivo Privado</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Action Buttons -->
+      <div class="d-flex justify-content-center gap-3 flex-wrap">
+        <a href="#catalogo" class="btn btn-hero-primary px-4 py-3">
+          <i class="fa-solid fa-gem me-2"></i> Explorar Colección
+        </a>
+        <button class="btn btn-hero-secondary px-4 py-3" id="btnQuickDemo">
+          <i class="fa-solid fa-bolt me-2 text-warning"></i> Cargar Simulación Rápida VIP
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Catalog Section -->
+  <main id="catalogo" class="container py-4">
+    <!-- Catalog Header Bar -->
+    <div class="catalog-header-bar d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4 p-3 rounded-4">
+      <div>
+        <h3 class="text-white fw-bold mb-0 d-flex align-items-center">
+          <i class="fa-solid fa-shapes text-cyan me-2"></i>
+          <span id="catalogCategoryTitle">Colección Completa</span>
+        </h3>
+        <small class="text-light-silver" id="catalogResultsCount">Mostrando todas las unidades disponibles</small>
+      </div>
+
+      <!-- Active Filters Badge Area -->
+      <div class="d-flex align-items-center gap-2 flex-wrap">
+        <span class="badge bg-dark-card border border-cyan text-cyan py-2 px-3" id="activeFilterBadge">
+          <i class="fa-solid fa-filter me-1"></i> Todas las Categorías
+        </span>
+        <button class="btn btn-sm btn-outline-warning" id="btnResetAll" title="Reiniciar búsqueda y filtros">
+          <i class="fa-solid fa-rotate-right me-1"></i> Restablecer
+        </button>
+      </div>
+    </div>
+
+    <!-- Vehicles Grid Container -->
+    <section class="row g-4" id="catalogGrid" aria-live="polite">
+      <!-- Loading Skeleton / Placeholder (Replaced dynamically via JS) -->
+      <div class="col-12 text-center py-5">
+        <div class="spinner-border text-cyan mb-3" role="status" style="width: 3rem; height: 3rem;">
+          <span class="visually-hidden">Cargando catálogo...</span>
+        </div>
+        <h4 class="text-white fw-bold">Iniciando Servidor de Catálogo Premium...</h4>
+        <p class="text-light-silver">Sincronizando flota de superdeportivos y motocicletas de alta gama.</p>
+      </div>
+    </section>
+
+    <!-- Empty State Container (Hidden by default) -->
+    <div id="emptyCatalogState" class="text-center py-5 d-none">
+      <div class="empty-icon-wrapper mb-3">
+        <i class="fa-solid fa-car-burst text-warning" style="font-size: 4rem;"></i>
+      </div>
+      <h3 class="text-white fw-bold">No se encontraron vehículos o motos</h3>
+      <p class="text-light-silver max-w-500 mx-auto">No hay unidades que coincidan con los criterios de búsqueda o filtros seleccionados. Intenta con otra marca o término de búsqueda.</p>
+      <button class="btn btn-cyan px-4 py-2 mt-2" onclick="window.LuxuryApp.resetFilters()">
+        <i class="fa-solid fa-arrow-rotate-left me-1"></i> Mostrar Todo el Catálogo
+      </button>
+    </div>
+  </main>
+
+  <!-- Modal Interactivo de Alquiler -->
+  <div class="modal fade" id="rentalModal" tabindex="-1" aria-labelledby="rentalModalTitle" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content custom-dark-modal">
+        <div class="modal-header border-bottom border-secondary-subtle">
+          <div class="d-flex align-items-center">
+            <div class="modal-icon-badge me-2 bg-orange-subtle text-orange">
+              <i class="fa-solid fa-key fs-5"></i>
+            </div>
+            <div>
+              <h5 class="modal-title text-white fw-bold mb-0" id="rentalModalTitle">Configuración de Contrato de Alquiler</h5>
+              <small class="text-cyan" id="rentalModalSubtitle">Luxury Motors Elite &bull; Servicio Corporativo</small>
+            </div>
+          </div>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+
+        <div class="modal-body p-4">
+          <div class="row g-4">
+            <!-- Left Column: Vehicle Image & Base Specs -->
+            <div class="col-md-5 text-center d-flex flex-column justify-content-between">
+              <div class="rental-preview-box p-3 rounded-4 mb-3">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <img id="rentalCarLogo" src="" alt="Marca" class="rental-brand-logo">
+                  <span class="badge bg-cyan-gradient text-dark fw-bold" id="rentalCarCode">LME-XXXX</span>
+                </div>
+                <div class="rental-img-container mb-2">
+                  <img id="rentalCarImg" src="" alt="Vehículo" class="img-fluid rental-car-photo">
+                </div>
+                <h5 class="text-white fw-bold mb-1" id="rentalCarName">Modelo</h5>
+                <span class="badge bg-dark-subtle border border-cyan text-cyan" id="rentalCarType">Tipo</span>
+              </div>
+
+              <!-- Base Rates Box -->
+              <div class="rates-summary-card p-3 rounded-3 text-start">
+                <h6 class="text-gold fw-bold mb-2"><i class="fa-solid fa-tag me-1"></i> Tarifas Base Oficiales:</h6>
+                <div class="d-flex justify-content-between text-light-silver mb-1">
+                  <span>Tarifa por Día (24 Horas):</span>
+                  <strong class="text-orange" id="rentalRateDay">$0 USD</strong>
+                </div>
+                <div class="d-flex justify-content-between text-light-silver">
+                  <span>Tarifa por Hora:</span>
+                  <strong class="text-cyan" id="rentalRateHour">$0 USD</strong>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column: Interactive Controls & Live Calculation -->
+            <div class="col-md-7">
+              <!-- Mode Selection Switch -->
+              <label class="form-label text-white fw-bold mb-2">
+                <i class="fa-solid fa-clock-rotate-left text-cyan me-1"></i> Modalidad de Renta:
+              </label>
+              <div class="btn-group w-100 mb-3" role="group">
+                <input type="radio" class="btn-check" name="rentalModeRadio" id="modeDays" value="Día(s)" checked>
+                <label class="btn btn-outline-cyan fw-bold py-2" for="modeDays">
+                  <i class="fa-solid fa-calendar-days me-1"></i> Por Día(s)
+                </label>
+
+                <input type="radio" class="btn-check" name="rentalModeRadio" id="modeHours" value="Hora(s)">
+                <label class="btn btn-outline-cyan fw-bold py-2" for="modeHours">
+                  <i class="fa-solid fa-stopwatch me-1"></i> Por Hora(s)
+                </label>
+              </div>
+
+              <!-- Duration and Date Inputs -->
+              <div class="row g-2 mb-3">
+                <div class="col-6">
+                  <label for="rentalDurationInput" class="form-label text-white fw-semibold small" id="lblDurationUnit">
+                    Cantidad de Día(s):
+                  </label>
+                  <div class="input-group">
+                    <button class="btn btn-dark border-secondary text-white" type="button" id="btnDecDuration">-</button>
+                    <input type="number" class="form-control bg-dark text-white border-secondary text-center fw-bold" id="rentalDurationInput" value="3" min="1" max="90">
+                    <button class="btn btn-dark border-secondary text-white" type="button" id="btnIncDuration">+</button>
+                  </div>
+                </div>
+
+                <div class="col-6">
+                  <label for="rentalStartDate" class="form-label text-white fw-semibold small">
+                    Fecha de Inicio:
+                  </label>
+                  <input type="date" class="form-control bg-dark text-white border-secondary" id="rentalStartDate" value="2026-10-27">
+                </div>
+              </div>
+
+              <!-- Security Deposit Notice (Fianza $500 Reembolsable) -->
+              <div class="deposit-alert-box p-3 rounded-3 mb-3">
+                <div class="d-flex align-items-center">
+                  <i class="fa-solid fa-vault text-warning fs-4 me-3"></i>
+                  <div>
+                    <strong class="text-warning d-block">Depósito de Fianza de Garantía: $500.00 USD</strong>
+                    <small class="text-white">Depósito reembolsable obligatorio conforme a la inspección de entrega física.</small>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Reactive Calculation Box in Real Time -->
+              <div class="calculation-box p-3 rounded-4 mb-3">
+                <div class="d-flex justify-content-between mb-1">
+                  <span class="text-light-silver">Tarifa Unitaria Aplicada:</span>
+                  <span class="text-white fw-bold" id="calcUnitRate">$0.00</span>
+                </div>
+                <div class="d-flex justify-content-between mb-1">
+                  <span class="text-light-silver">Duración Contratada:</span>
+                  <span class="text-white fw-bold" id="calcDuration">3 Día(s)</span>
+                </div>
+                <div class="d-flex justify-content-between mb-1">
+                  <span class="text-light-silver">Subtotal Alquiler:</span>
+                  <span class="text-orange fw-bold" id="calcSubtotal">$0.00</span>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                  <span class="text-light-silver">Fianza Reembolsable:</span>
+                  <span class="text-warning fw-bold">+$500.00 USD</span>
+                </div>
+                <hr class="border-secondary my-2">
+                <div class="d-flex justify-content-between align-items-center">
+                  <span class="text-white fw-bold">Total Estimado de Alquiler:</span>
+                  <span class="text-gold fs-4 fw-extrabold" id="calcTotalEstimated">$0.00</span>
+                </div>
+              </div>
+
+              <!-- VIP Rental Policy / Terms -->
+              <div class="terms-mini-box p-2 rounded-2 border border-secondary-subtle">
+                <ul class="list-unstyled mb-0 small text-light-silver">
+                  <li><i class="fa-solid fa-circle-check text-cyan me-1"></i> <strong>Póliza Platinum:</strong> Cobertura completa con deducible del 10%.</li>
+                  <li><i class="fa-solid fa-gas-pump text-orange me-1"></i> <strong>Política 100% Tanque Lleno:</strong> Se entrega y devuelve con combustible al 100%.</li>
+                  <li><i class="fa-solid fa-signature text-gold me-1"></i> <strong>Contrato Legal:</strong> Incluye firmas digitales y cláusulas de responsabilidad en PDF.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer border-top border-secondary-subtle d-flex justify-content-between">
+          <button type="button" class="btn btn-outline-secondary px-4" data-bs-dismiss="modal">
+            Cancelar
+          </button>
+          <button type="button" class="btn btn-orange-gradient px-4 py-2 fw-bold text-white shadow-lg" id="btnConfirmAddToCartRental">
+            <i class="fa-solid fa-cart-plus me-1"></i> Agregar Alquiler al Carrito
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal del Carrito de Compras -->
+  <div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+      <div class="modal-content custom-dark-modal">
+        <div class="modal-header border-bottom border-secondary-subtle">
+          <div class="d-flex align-items-center">
+            <div class="modal-icon-badge me-2 bg-gold-subtle text-gold">
+              <i class="fa-solid fa-cart-shopping fs-5"></i>
+            </div>
+            <div>
+              <h5 class="modal-title text-white fw-bold mb-0" id="cartModalLabel">Carrito de Adquisición y Alquiler</h5>
+              <small class="text-cyan">Luxury Motors Elite &bull; Facturación & Contratos Legales</small>
+            </div>
+          </div>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+
+        <div class="modal-body p-4">
+          <!-- Cart Items Container -->
+          <div class="cart-items-wrapper mb-4">
+            <div id="cartItemsList">
+              <!-- Dynamically populated via JS -->
+            </div>
+          </div>
+
+          <!-- Financial Breakdown Summary Card -->
+          <div class="cart-financial-summary p-4 rounded-4">
+            <h5 class="text-cyan fw-bold mb-3 d-flex align-items-center">
+              <i class="fa-solid fa-calculator me-2"></i> Desglose Financiero & Fiscal
+            </h5>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <div class="p-3 rounded-3 bg-dark-subtle border border-secondary mb-2">
+                  <div class="d-flex justify-content-between text-white mb-2">
+                    <span>Subtotal Operaciones:</span>
+                    <strong class="text-white" id="cartSummarySubtotal">$0.00 USD</strong>
+                  </div>
+                  <div class="d-flex justify-content-between text-white mb-2">
+                    <span>Impuestos Fiscales (ITBIS 18%):</span>
+                    <strong class="text-cyan" id="cartSummaryTax">$0.00 USD</strong>
+                  </div>
+                  <div class="d-flex justify-content-between text-white">
+                    <span>Depósito de Fianza Reembolsable:</span>
+                    <strong class="text-warning" id="cartSummaryDeposit">$0.00 USD</strong>
+                  </div>
+                </div>
+                <small class="text-light-silver">
+                  * El depósito de garantía de $500 por cada vehículo rentado es 100% reembolsable tras la inspección física de retorno.
+                </small>
+              </div>
+
+              <div class="col-md-6 d-flex flex-column justify-content-center text-md-end">
+                <span class="text-light-silver text-uppercase fw-semibold mb-1">Monto Total Liquidable:</span>
+                <h2 class="text-gold fw-extrabold display-6 mb-2" id="cartSummaryTotal">$0.00 USD</h2>
+                <span class="badge bg-success-subtle text-success border border-success align-self-md-end py-2 px-3 fw-bold">
+                  <i class="fa-solid fa-lock me-1"></i> Transacción Cifrada y Blindada SSL 256-Bit
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer border-top border-secondary-subtle d-flex justify-content-between flex-wrap gap-2">
+          <div class="d-flex gap-2">
+            <button type="button" class="btn btn-outline-danger btn-sm" id="btnClearCart">
+              <i class="fa-solid fa-trash-can me-1"></i> Vaciar Carrito
+            </button>
+            <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">
+              <i class="fa-solid fa-arrow-left me-1"></i> Seguir Explorando
+            </button>
+          </div>
+          <button type="button" class="btn btn-cyan-gradient px-4 py-2 fw-bold text-dark shadow-lg" id="btnProceedToCheckout">
+            Proceder al Pago Seguro <i class="fa-solid fa-arrow-right ms-1"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Pasarela de Pago / Checkout (Con Campos Pre-Cargados) -->
+  <div class="modal fade" id="checkoutModal" tabindex="-1" aria-labelledby="checkoutModalLabel" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+      <div class="modal-content custom-dark-modal">
+        <div class="modal-header border-bottom border-secondary-subtle">
+          <div class="d-flex align-items-center">
+            <div class="modal-icon-badge me-2 bg-cyan-subtle text-cyan">
+              <i class="fa-solid fa-credit-card fs-5"></i>
+            </div>
+            <div>
+              <h5 class="modal-title text-white fw-bold mb-0" id="checkoutModalLabel">Pasarela de Pago Segura & Facturación Oficial</h5>
+              <small class="text-cyan">Luxury Motors Elite &bull; Emisión Oficial de Documentos LME-XXXXXX</small>
+            </div>
+          </div>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+
+        <div class="modal-body p-4">
+          <!-- 1-Click Fast Pre-Fill Button -->
+          <div class="vip-demo-banner p-3 rounded-4 mb-4 d-flex justify-content-between align-items-center flex-wrap gap-3">
+            <div class="d-flex align-items-center">
+              <i class="fa-solid fa-bolt-lightning text-warning fs-3 me-3"></i>
+              <div>
+                <strong class="text-white d-block">Modo Demostración VIP Evaluador Activado</strong>
+                <span class="text-light-silver small">Los campos ya se encuentran pre-completados por defecto con los datos oficiales de evaluación corporativa.</span>
+              </div>
+            </div>
+            <button type="button" class="btn btn-warning fw-bold px-3 py-2 btn-sm shadow" id="btnRefillDemoData">
+              <i class="fa-solid fa-wand-magic-sparkles me-1"></i> ⚡ Rellenar Datos Ficticios de Prueba (Demo VIP)
+            </button>
+          </div>
+
+          <form id="checkoutForm" novalidate>
+            <div class="row g-4">
+              <!-- Column 1: Client Information -->
+              <div class="col-lg-6">
+                <div class="checkout-card p-4 rounded-4 h-100">
+                  <h5 class="text-cyan fw-bold mb-3">
+                    <i class="fa-solid fa-user-tie me-2"></i> Datos del Titular / Arrendatario
+                  </h5>
+
+                  <!-- Nombre y Apellidos -->
+                  <div class="mb-3">
+                    <label for="clientName" class="form-label text-white fw-semibold">Nombre y Apellidos:</label>
+                    <div class="input-group">
+                      <span class="input-group-text bg-dark border-secondary text-cyan"><i class="fa-solid fa-id-card"></i></span>
+                      <input type="text" class="form-control bg-dark border-secondary text-white" id="clientName" value="Ing. Wisler M. Espinales" placeholder="Ej. Ing. Wisler M. Espinales" required>
+                    </div>
+                  </div>
+
+                  <!-- Documento / Matrícula y Licencia -->
+                  <div class="row g-2 mb-3">
+                    <div class="col-md-6">
+                      <label for="clientId" class="form-label text-white fw-semibold">Documento / Matrícula:</label>
+                      <input type="text" class="form-control bg-dark border-secondary text-white" id="clientId" value="24-EISN-8-013" placeholder="Ej. 24-EISN-8-013" required>
+                    </div>
+                    <div class="col-md-6">
+                      <label for="clientLicense" class="form-label text-white fw-semibold">Licencia de Conducir:</label>
+                      <input type="text" class="form-control bg-dark border-secondary text-white" id="clientLicense" value="DO-8874125-VIP (Vigente)" placeholder="Ej. DO-8874125-VIP" required>
+                    </div>
+                  </div>
+
+                  <!-- Teléfono y Correo Electrónico -->
+                  <div class="row g-2 mb-3">
+                    <div class="col-md-6">
+                      <label for="clientPhone" class="form-label text-white fw-semibold">Teléfono de Contacto:</label>
+                      <div class="input-group">
+                        <span class="input-group-text bg-dark border-secondary text-cyan"><i class="fa-solid fa-phone"></i></span>
+                        <input type="text" class="form-control bg-dark border-secondary text-white" id="clientPhone" value="+1 (849) 816-5409" placeholder="+1 (849) 816-5409" required>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <label for="clientEmail" class="form-label text-white fw-semibold">Correo Electrónico:</label>
+                      <div class="input-group">
+                        <span class="input-group-text bg-dark border-secondary text-cyan"><i class="fa-solid fa-envelope"></i></span>
+                        <input type="email" class="form-control bg-dark border-secondary text-white" id="clientEmail" value="thewislermanuel@gmail.com" placeholder="thewislermanuel@gmail.com" required>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Dirección de Entrega -->
+                  <div class="mb-3">
+                    <label for="clientAddress" class="form-label text-white fw-semibold">Dirección de Entrega / Despacho:</label>
+                    <div class="input-group">
+                      <span class="input-group-text bg-dark border-secondary text-cyan"><i class="fa-solid fa-location-dot"></i></span>
+                      <input type="text" class="form-control bg-dark border-secondary text-white" id="clientAddress" value="Av. Anacaona #105, Torre Bella Vista, Santo Domingo, D.N." placeholder="Av. Anacaona #105, Torre Bella Vista, Santo Domingo, D.N." required>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Column 2: Payment Gateway Card -->
+              <div class="col-lg-6">
+                <div class="checkout-card p-4 rounded-4 h-100 d-flex flex-column justify-content-between">
+                  <div>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                      <h5 class="text-gold fw-bold mb-0">
+                        <i class="fa-solid fa-shield-halved me-2"></i> Tarjeta de Pago Simulada
+                      </h5>
+                      <div class="card-brands-icons text-light-silver fs-4">
+                        <i class="fa-brands fa-cc-visa text-cyan me-1"></i>
+                        <i class="fa-brands fa-cc-mastercard text-warning me-1"></i>
+                        <i class="fa-brands fa-cc-amex text-info"></i>
+                      </div>
+                    </div>
+
+                    <!-- Número de Tarjeta -->
+                    <div class="mb-3">
+                      <label for="cardNumber" class="form-label text-white fw-semibold">Número de Tarjeta Blindada:</label>
+                      <div class="input-group">
+                        <span class="input-group-text bg-dark border-secondary text-gold"><i class="fa-solid fa-credit-card"></i></span>
+                        <input type="text" class="form-control bg-dark border-secondary text-white fw-bold tracking-wider" id="cardNumber" value="4532 8901 2345 8899" placeholder="4532 8901 2345 8899" maxlength="19" required>
+                      </div>
+                    </div>
+
+                    <!-- Vencimiento & CVV -->
+                    <div class="row g-2 mb-3">
+                      <div class="col-6">
+                        <label for="cardExpiry" class="form-label text-white fw-semibold">Expiración (MM/AA):</label>
+                        <input type="text" class="form-control bg-dark border-secondary text-white text-center fw-bold" id="cardExpiry" value="12/28" placeholder="12/28" maxlength="5" required>
+                      </div>
+                      <div class="col-6">
+                        <label for="cardCVV" class="form-label text-white fw-semibold">Código CVV / CVC:</label>
+                        <div class="input-group">
+                          <input type="password" class="form-control bg-dark border-secondary text-white text-center fw-bold" id="cardCVV" value="789" placeholder="789" maxlength="4" required>
+                          <span class="input-group-text bg-dark border-secondary text-secondary" title="Código de seguridad de 3 dígitos"><i class="fa-solid fa-lock"></i></span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Order Summary Box inside checkout -->
+                    <div class="checkout-summary-mini p-3 rounded-3 mb-3">
+                      <div class="d-flex justify-content-between align-items-center mb-1">
+                        <span class="text-light-silver">Ítems a Procesar:</span>
+                        <span class="text-white fw-bold" id="checkoutItemsCount">0 Ítems</span>
+                      </div>
+                      <div class="d-flex justify-content-between align-items-center mb-1">
+                        <span class="text-light-silver">Monto Final a Procesar:</span>
+                        <span class="text-gold fw-extrabold fs-5" id="checkoutTotalAmount">$0.00 USD</span>
+                      </div>
+                      <div class="d-flex justify-content-between align-items-center">
+                        <span class="text-light-silver">Tipo de Documento Oficial:</span>
+                        <span class="badge bg-cyan-gradient text-dark fw-bold" id="checkoutDocTypeBadge">FACTURA / CONTRATO</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Submit Transaction Button -->
+                  <div>
+                    <button type="submit" class="btn btn-confirm-pay w-100 py-3 fw-bold text-dark shadow-lg" id="btnSubmitPayment">
+                      <i class="fa-solid fa-file-pdf me-2"></i> Confirmar Transacción & Generar Documento Oficial (PDF)
+                    </button>
+                    <div class="text-center mt-2">
+                      <small class="text-light-silver">
+                        <i class="fa-solid fa-circle-check text-success me-1"></i> Al confirmar, se descargará el PDF oficial exacto LME-XXXXXX sin congelar su navegador.
+                      </small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating Cart Button -->
+  <button class="btn-floating-cart shadow-lg" id="btnFloatingCart" data-bs-toggle="modal" data-bs-target="#cartModal" title="Ver Carrito de Compras & Alquiler">
+    <i class="fa-solid fa-cart-shopping floating-cart-icon"></i>
+    <span class="badge rounded-pill bg-danger border border-white position-absolute top-0 start-100 translate-middle floating-cart-badge" id="floatingCartBadge">0</span>
+  </button>
+
+  <!-- ======================================================================================================================== -->
+  <!-- 8. FOOTER MAESTRO OFICIAL (OBLIGATORIO Y LITERAL) -->
+  <!-- ======================================================================================================================== -->
+  <style>
+    footer {
+      background: linear-gradient(135deg, #0a0a0a, #1c1c1c);
+      color: #fff;
+      padding: 50px 0 30px;
+      text-align: center;
+      margin-top: 20px;
+      box-shadow: 0 -5px 20px rgba(0,0,0,0.2);
+    }
+    footer img.footer-avatar {
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      border: 4px solid #ffffff;
+      margin-bottom: 20px;
+      object-fit: cover;
+      transition: transform 0.3s;
+    }
+    footer img.footer-avatar:hover {
+      transform: scale(1.05);
+      border-color: #f8f9fa;
+    }
+    footer h4 {
+      font-weight: 800;
+      color: #00bfff;
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+    footer p.bio {
+      font-size: 16px;
+      color: #ddd;
+      max-width: 800px;
+      margin: 0 auto 20px;
+      line-height: 1.6;
+    }
+    .tech-stack {
+      display: inline-block;
+      background: rgba(0, 191, 255, 0.1);
+      color: #00bfff;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 13px;
+      margin: 4px;
+      border: 1px solid rgba(0, 191, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    .tech-stack:hover {
+      background: rgba(0, 191, 255, 0.2);
+      transform: translateY(-2px);
+    }
+    .tech-stack i { margin-right: 6px; font-size: 15px; }
+    .keyword { color: #00d2ff; font-weight: bold; }
+    .keyword-ai { color: #ff007f; font-weight: bold; }
+    .social-icons-footer { margin: 25px 0; }
+    .social-icons-footer a {
+      color: #fff;
+      font-size: 24px;
+      margin: 0 12px;
+      transition: all 0.3s ease;
+      display: inline-block;
+    }
+    .social-icons-footer a:hover {
+      color: #00bfff;
+      transform: translateY(-5px) scale(1.1);
+      text-shadow: 0 0 10px rgba(0, 191, 255, 0.5);
+    }
+    .btn-youtube {
+      background: linear-gradient(90deg, #ff0000, #cc0000);
+      color: #fff;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 30px;
+      font-weight: 700;
+      font-size: 16px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(255,0,0,0.3);
+    }
+    .btn-youtube:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 20px rgba(255,0,0,0.5);
+    }
+  </style>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <img src="assets/foto-jpg.jpeg" class="footer-avatar" alt="Ing. Wisler M. Espinales">
+      <h4>Ing. Wisler M. Espinales</h4>
+     <p class="bio">
+  <span class="keyword">Desarrollador Full Stack</span>, 
+  <span style="color: #00ff88; font-weight: bold;">Analista de Datos</span> y 
+  <span style="color: #ff8800; font-weight: bold;">Científico de Datos</span>, 
+  además de <span class="keyword-ai">Docente universitario en tecnologías</span>. 
+  Apasionado por la innovación, la <span class="keyword-ai">Inteligencia Artificial</span> y la educación digital.<br>
+  💡 Creador de contenido especializado en arquitectura de software, bases de datos avanzadas, análisis de datos y soluciones tecnológicas modernas.
+</p>
+
+      
+      <div class="mb-4">
+        <span class="tech-stack"><i class="fab fa-html5" style="color: #e34f26;"></i> HTML</span>
+        <span class="tech-stack"><i class="fab fa-css3-alt" style="color: #1572b6;"></i> CSS</span>
+        <span class="tech-stack"><i class="fab fa-js" style="color: #f7df1e;"></i> JS</span>
+        <span class="tech-stack"><i class="fab fa-bootstrap" style="color: #7952b3;"></i> Bootstrap</span>
+        <span class="tech-stack"><i class="fab fa-php" style="color: #777bb4;"></i> PHP</span>
+        <span class="tech-stack"><i class="fab fa-laravel" style="color: #ff2d20;"></i> Laravel</span>
+        <span class="tech-stack"><i class="fas fa-code"></i> C#</span>
+        <span class="tech-stack"><i class="fab fa-microsoft"></i> .NET MAUI</span>
+        <span class="tech-stack"><i class="fab fa-python" style="color: #3776ab;"></i> Python</span>
+        <span class="tech-stack"><i class="fas fa-database" style="color: #cc292b;"></i> SQL Server</span>
+        <span class="tech-stack"><i class="fas fa-file-excel" style="color: #1D6F42;"></i> Excel</span>
+        <span class="tech-stack"><i class="fas fa-chart-bar" style="color: #f2c811;"></i> Power BI</span>
+      </div>
+
+      <div class="social-icons-footer">
+        <a href="https://www.youtube.com/@WislerM.Espinales04" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>
+        <a href="https://github.com/thewislermanuel-ing" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+        <a href="https://www.linkedin.com/in/wisler-m-espinales-5b3381445/" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+        <a href="https://www.instagram.com/xwisler04?stkn=MzFjdzF5azB5NjB0" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="https://www.facebook.com/share/1F8YpMCxSd/" target="_blank" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+        <a href="https://x.com/xwisler04" target="_blank" title="X (Twitter)"><i class="fa-brands fa-x-twitter"></i></a>
+      </div>
+
+      <button class="btn-youtube" onclick="window.open('https://www.youtube.com/@WislerM.Espinales04','_blank')">
+        🎥 Suscríbete a mi canal
+      </button>
+
+      <hr class="my-4" style="border-color:#333;">
+      <p class="mb-0" style="color: #888; font-size: 14px;">© 2026 Catálogo de Vehículos Premium | Arquitectura por <span style="color: #ccc; font-weight: bold;">Ing. Wisler M. Espinales </span></p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <!-- Bootstrap 5.3.3 JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- SweetAlert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <!-- html2pdf.js Bundle -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <!-- Base64 Thumbnails Architecture (CORS/file:// Fail-safe) -->
+  <script src="pdf_thumbnails.js"></script>
+  <!-- Embedded Data Fallback (Local file:// Fail-safe) -->
+  <script src="embedded_data.js"></script>
+  <!-- Main Application Logic -->
+  <script src="app.js"></script>
+</body>
+</html>
